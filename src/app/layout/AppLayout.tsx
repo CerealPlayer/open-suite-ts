@@ -1,12 +1,12 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { routes } from '../../router'
+import { appRoutes } from '../routes'
 
 const navClassName = ({ isActive }: { isActive: boolean }) =>
   `rounded-md px-3 py-2 text-sm font-medium transition ${
     isActive ? 'bg-indigo-600 text-white' : 'text-slate-700 hover:bg-slate-200'
   }`
 
-export function DashboardLayout() {
+export function AppLayout() {
   return (
     <div className="min-h-screen">
       <header className="border-b border-slate-200 bg-white">
@@ -20,13 +20,13 @@ export function DashboardLayout() {
             </h1>
           </div>
           <nav className="flex gap-2">
-            <NavLink to={routes.home} end className={navClassName}>
+            <NavLink to={appRoutes.home} end className={navClassName}>
               Home
             </NavLink>
-            <NavLink to={routes.upload} className={navClassName}>
+            <NavLink to={appRoutes.upload} className={navClassName}>
               Upload
             </NavLink>
-            <NavLink to={routes.documents} className={navClassName}>
+            <NavLink to={appRoutes.documents} className={navClassName}>
               Documents
             </NavLink>
           </nav>

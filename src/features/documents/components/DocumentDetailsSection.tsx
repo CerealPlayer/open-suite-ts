@@ -1,24 +1,30 @@
-import { Link, useParams } from 'react-router-dom'
-import { routes } from '../../router'
+import { Link } from 'react-router-dom'
+import { Panel } from '../../../components'
 
-export function DocumentDetailsPage() {
-  const { documentId } = useParams()
+type DocumentDetailsSectionProps = {
+  documentId: string
+  documentsPath: string
+}
 
+export function DocumentDetailsSection({
+  documentId,
+  documentsPath,
+}: DocumentDetailsSectionProps) {
   return (
-    <section className="space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <Panel as="section" className="space-y-4">
       <h2 className="text-2xl font-semibold text-slate-900">Document details</h2>
       <p className="text-slate-700">
-        Placeholder page for document: <strong>{documentId ?? 'unknown'}</strong>
+        Placeholder page for document: <strong>{documentId}</strong>
       </p>
       <p className="text-slate-600">
         This route is ready. Full details content will be added in a future iteration.
       </p>
       <Link
-        to={routes.documents}
+        to={documentsPath}
         className="inline-flex rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-900"
       >
         Back to documents
       </Link>
-    </section>
+    </Panel>
   )
 }

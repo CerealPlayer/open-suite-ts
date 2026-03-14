@@ -1,73 +1,52 @@
-# React + TypeScript + Vite
+# Open Suite TS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Document management dashboard built with React, TypeScript, Vite, React Router, React Query, and Zustand.
 
-Currently, two official plugins are available:
+## Scripts
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- `npm run dev` - start local development server
+- `npm run lint` - run ESLint
+- `npm run build` - run TypeScript build + Vite production build
+- `npm run preview` - preview production build
 
-## React Compiler
+## Architecture
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This project uses a Bulletproof React-inspired, **feature-first** structure:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+src
+├── app         # app-level orchestration (router, layout, route composition)
+├── components  # shared reusable UI atoms/building blocks
+├── config      # shared configuration (env, constants)
+├── features    # independent feature modules
+├── lib         # shared libraries/helpers
+└── ...
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Each feature exposes a small public API through `src/features/<feature>/index.ts`:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- exported components
+- exported custom hooks
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Internal modules like stores, API functions, feature-local types, and feature utils stay inside the feature folder and are not imported directly by the app.
+
+### Composition rules
+
+- Shared modules (including `src/components`) can be used by features and app.
+- Features should not import from other features.
+- Features should not import from app.
+- App composes features.
+- App imports from a feature's public API only (`src/features/<feature>`).
+
+### Shared UI policy
+
+- Put reusable atomic/design-system UI in `src/components`.
+- `src/components` is globally importable by both `src/features` and `src/app`.
+- Keep feature-specific UI inside each feature's `components` folder.
+
+### UI and logic split
+
+- Components are presentational and expose minimal props.
+- Business logic, orchestration, and data wiring live in feature hooks.
+- UI-only local state/handlers are allowed inside components when they are purely presentational.
+- Pure logic (formatting, filtering, parsing, mapping) belongs in feature `utils`.

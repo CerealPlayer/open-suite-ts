@@ -8,10 +8,18 @@ export type DocumentRecord = {
 
 export type DocumentApiRecord = {
   id: string
-  path: string
   file_name: string
   size: number
   created_at: string
   updated_at: string
-  deleted_at: string | null
+}
+
+export function mapDocumentRecord(record: DocumentApiRecord): DocumentRecord {
+  return {
+    id: record.id,
+    title: record.file_name,
+    created_at: record.created_at,
+    edited_at: record.updated_at,
+    size: record.size,
+  }
 }
