@@ -5,7 +5,7 @@ export function DocumentDetailsPage() {
   const { documentId } = useParams()
 
   return (
-    <section className="space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-xs">
+    <section className="space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
       <h2 className="text-2xl font-semibold text-slate-900">Document details</h2>
       <p className="text-slate-700">
         Placeholder page for document: <strong>{documentId ?? 'unknown'}</strong>

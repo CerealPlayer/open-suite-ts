@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
-import { DOCUMENT_UPLOAD_URL_PLACEHOLDER } from '../../lib/constants'
+import { useMutation } from '@tanstack/react-query'
+import { uploadDocument } from '../../lib/api'
+import { API_BASE_URL, DOCUMENT_UPLOAD_ENDPOINT } from '../../lib/constants'
 import { useDashboardStore } from '../../store/useDashboardStore'
 
 const DOCX_MIME_TYPE =
@@ -14,6 +16,9 @@ export function UploadPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
   const setLastSelectedDocxName = useDashboardStore((state) => state.setLastSelectedDocxName)
+  const uploadMutation = useMutation({
+    mutationFn: uploadDocument,
+  })
 
   const fileSize = useMemo(() => {
     if (!selectedFile) {
@@ -47,7 +52,7 @@ export function UploadPage() {
     setStatusMessage(null)
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     if (!selectedFile) {
@@ -55,16 +60,26 @@ export function UploadPage() {
       return
     }
 
-    setStatusMessage(
-      `UI ready. Future upload endpoint: ${DOCUMENT_UPLOAD_URL_PLACEHOLDER}`,
-    )
+    try {
+      await uploadMutation.mutateAsync(selectedFile)
+      setStatusMessage('Document uploaded successfully.')
+      setSelectedFile(null)
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Upload failed unexpectedly.'
+      setStatusMessage(`Upload failed: ${errorMessage}`)
+    }
   }
 
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs">
+    <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
       <h2 className="text-2xl font-semibold text-slate-900">Upload document</h2>
       <p className="mt-2 text-slate-600">
         Only DOCX files are supported in this first version of the dashboard.
+      </p>
+      <p className="mt-1 text-xs text-slate-500">
+        Endpoint: {API_BASE_URL}
+        {DOCUMENT_UPLOAD_ENDPOINT}
       </p>
 
       <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
@@ -101,9 +116,10 @@ export function UploadPage() {
 
         <button
           type="submit"
+          disabled={uploadMutation.isPending}
           className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700"
         >
-          Upload document
+          {uploadMutation.isPending ? 'Uploading...' : 'Upload document'}
         </button>
       </form>
 

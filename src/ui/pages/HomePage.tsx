@@ -7,7 +7,7 @@ export function HomePage() {
 
   return (
     <section className="space-y-8">
-      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs">
+      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 className="text-2xl font-semibold text-slate-900">Welcome</h2>
         <p className="mt-2 text-slate-600">
           Use this dashboard to upload DOCX files and browse documents available in
@@ -18,7 +18,7 @@ export function HomePage() {
       <div className="grid gap-4 md:grid-cols-2">
         <Link
           to={routes.upload}
-          className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs transition hover:border-indigo-300 hover:shadow-sm"
+          className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-indigo-300 hover:shadow"
         >
           <h3 className="text-lg font-semibold text-slate-900">Upload a document</h3>
           <p className="mt-1 text-slate-600">
@@ -28,7 +28,7 @@ export function HomePage() {
 
         <Link
           to={routes.documents}
-          className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs transition hover:border-indigo-300 hover:shadow-sm"
+          className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-indigo-300 hover:shadow"
         >
           <h3 className="text-lg font-semibold text-slate-900">View documents</h3>
           <p className="mt-1 text-slate-600">

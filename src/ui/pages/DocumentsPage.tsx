@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { mockDocuments } from '../../data/mockDocuments'
+import { fetchDocuments } from '../../lib/api'
 import { useDashboardStore } from '../../store/useDashboardStore'
 
 function formatDate(isoDate: string): string {
@@ -20,10 +20,11 @@ export function DocumentsPage() {
   const navigate = useNavigate()
   const documentFilter = useDashboardStore((state) => state.documentFilter)
   const setDocumentFilter = useDashboardStore((state) => state.setDocumentFilter)
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['documents'],
-    queryFn: async () => mockDocuments,
+    queryFn: fetchDocuments,
   })
+  const errorMessage = error instanceof Error ? error.message : 'Unknown error'
 
   const filteredDocuments = useMemo(() => {
     if (!data) {
@@ -41,7 +42,7 @@ export function DocumentsPage() {
   }, [data, documentFilter])
 
   return (
-    <section className="space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-xs">
+    <section className="space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 className="text-2xl font-semibold text-slate-900">Documents</h2>
@@ -68,6 +69,10 @@ export function DocumentsPage() {
 
       {isLoading ? (
         <p className="text-sm text-slate-600">Loading documents...</p>
+      ) : isError ? (
+        <p className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+          Failed to fetch documents: {errorMessage}
+        </p>
       ) : (
         <div className="overflow-x-auto rounded-lg border border-slate-200">
           <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
@@ -90,7 +95,7 @@ export function DocumentsPage() {
                       navigate(`/documents/${document.id}`)
                     }
                   }}
-                  className="cursor-pointer transition hover:bg-slate-50 focus:bg-slate-100 focus:outline-hidden"
+                  className="cursor-pointer transition hover:bg-slate-50 focus:bg-slate-100 focus:outline-none"
                 >
                   <td className="px-4 py-3 font-medium text-slate-900">{document.title}</td>
                   <td className="px-4 py-3 text-slate-700">
