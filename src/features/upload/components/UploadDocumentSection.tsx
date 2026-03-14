@@ -1,33 +1,20 @@
-import type { ChangeEventHandler, SubmitEventHandler } from "react";
 import { Notice, Panel } from "../../../components";
+import { useUploadDocument } from "../hooks/useUploadDocument";
 
-type UploadDocumentSectionProps = {
-  uploadEndpoint: string;
-  selectedFileName: string | null;
-  fileSize: string | null;
-  statusMessage: string | null;
-  isUploading: boolean;
-  onFileChange: ChangeEventHandler<HTMLInputElement>;
-  onSubmit: SubmitEventHandler<HTMLFormElement>;
-};
+type UploadDocumentSectionProps = {};
 
-export function UploadDocumentSection({
-  uploadEndpoint,
-  selectedFileName,
-  fileSize,
-  statusMessage,
-  isUploading,
-  onFileChange,
-  onSubmit,
-}: UploadDocumentSectionProps) {
+export function UploadDocumentSection({}: UploadDocumentSectionProps) {
+  const {
+    selectedFileName,
+    fileSize,
+    statusMessage,
+    isUploading,
+    onFileChange,
+    onSubmit,
+  } = useUploadDocument();
   return (
     <Panel as="section">
       <h2 className="text-2xl font-semibold text-slate-900">Upload document</h2>
-      <p className="mt-2 text-slate-600">
-        Only DOCX files are supported in this first version of the dashboard.
-      </p>
-      <p className="mt-1 text-xs text-slate-500">Endpoint: {uploadEndpoint}</p>
-
       <form className="mt-6 space-y-4" onSubmit={onSubmit}>
         <div>
           <label

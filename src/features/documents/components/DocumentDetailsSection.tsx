@@ -1,23 +1,26 @@
-import { Link } from 'react-router-dom'
-import { Panel } from '../../../components'
+import { Link } from "react-router-dom";
+import { Panel } from "../../../components";
+import { useDocumentDetails } from "../hooks/useDocumentDetails";
 
 type DocumentDetailsSectionProps = {
-  documentId: string
-  documentsPath: string
-}
+  documentsPath: string;
+};
 
 export function DocumentDetailsSection({
-  documentId,
   documentsPath,
 }: DocumentDetailsSectionProps) {
+  const { documentId } = useDocumentDetails();
   return (
     <Panel as="section" className="space-y-4">
-      <h2 className="text-2xl font-semibold text-slate-900">Document details</h2>
+      <h2 className="text-2xl font-semibold text-slate-900">
+        Document details
+      </h2>
       <p className="text-slate-700">
         Placeholder page for document: <strong>{documentId}</strong>
       </p>
       <p className="text-slate-600">
-        This route is ready. Full details content will be added in a future iteration.
+        This route is ready. Full details content will be added in a future
+        iteration.
       </p>
       <Link
         to={documentsPath}
@@ -26,5 +29,5 @@ export function DocumentDetailsSection({
         Back to documents
       </Link>
     </Panel>
-  )
+  );
 }
