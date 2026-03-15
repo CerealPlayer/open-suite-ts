@@ -5,7 +5,7 @@ import { uploadDocument } from "../api/uploadDocument";
 import { formatFileSize } from "../utils/formatFileSize";
 import { isDocxFile } from "../utils/isDocxFile";
 
-export function useUploadDocument() {
+export function useDocumentUpload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 

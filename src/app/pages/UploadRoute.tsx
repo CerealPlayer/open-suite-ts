@@ -1,5 +1,5 @@
-import { UploadDocumentSection } from "../../features/upload";
+import { DocumentUpload } from "../../features/upload";
 
 export function UploadRoute() {
-  return <UploadDocumentSection />;
+  return <DocumentUpload />;
 }

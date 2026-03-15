@@ -1,9 +1,9 @@
 import { Notice, Panel } from "../../../components";
-import { useUploadDocument } from "../hooks/useUploadDocument";
+import { useDocumentUpload } from "../hooks/useUploadDocument";
 
 type UploadDocumentSectionProps = {};
 
-export function UploadDocumentSection({}: UploadDocumentSectionProps) {
+export function DocumentUpload({}: UploadDocumentSectionProps) {
   const {
     selectedFileName,
     fileSize,
@@ -11,7 +11,7 @@ export function UploadDocumentSection({}: UploadDocumentSectionProps) {
     isUploading,
     onFileChange,
     onSubmit,
-  } = useUploadDocument();
+  } = useDocumentUpload();
   return (
     <Panel as="section">
       <h2 className="text-2xl font-semibold text-slate-900">Upload document</h2>

@@ -1,2 +1,2 @@
-export { UploadDocumentSection } from "./components/UploadDocumentSection";
-export { useUploadDocument } from "./hooks/useUploadDocument";
+export { DocumentUpload } from "./components/UploadDocumentSection";
+export { useDocumentUpload } from "./hooks/useUploadDocument";
