@@ -2,16 +2,13 @@ import { useMutation } from "@tanstack/react-query";
 import type { ChangeEvent, FormEvent } from "react";
 import { useMemo, useState } from "react";
 import { uploadDocument } from "../api/uploadDocument";
-import { useUploadStore } from "../stores/useUploadStore";
 import { formatFileSize } from "../utils/formatFileSize";
 import { isDocxFile } from "../utils/isDocxFile";
 
 export function useUploadDocument() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
-  const setLastSelectedDocxName = useUploadStore(
-    (state) => state.setLastSelectedDocxName,
-  );
+
   const uploadMutation = useMutation({
     mutationFn: uploadDocument,
   });
@@ -29,21 +26,18 @@ export function useUploadDocument() {
 
     if (!file) {
       setSelectedFile(null);
-      setLastSelectedDocxName(null);
       setStatusMessage("Please choose a DOCX file.");
       return;
     }
 
     if (!isDocxFile(file)) {
       setSelectedFile(null);
-      setLastSelectedDocxName(null);
       setStatusMessage("Only .docx files are allowed.");
       event.target.value = "";
       return;
     }
 
     setSelectedFile(file);
-    setLastSelectedDocxName(file.name);
     setStatusMessage(null);
   };
 
