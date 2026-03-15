@@ -1,5 +1,5 @@
 import { Notice, Panel } from "../../../components";
-import { useDocumentUpload } from "../hooks/useUploadDocument";
+import { useDocumentUpload } from "../hooks/useDocumentUpload";
 
 type UploadDocumentSectionProps = {};
 
