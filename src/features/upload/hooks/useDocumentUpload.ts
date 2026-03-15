@@ -8,6 +8,9 @@ import { isDocxFile } from "../utils/isDocxFile";
 export function useDocumentUpload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [uploadedDocumentId, setUploadedDocumentId] = useState<string | null>(
+    null,
+  );
 
   const uploadMutation = useMutation({
     mutationFn: uploadDocument,
@@ -27,18 +30,21 @@ export function useDocumentUpload() {
     if (!file) {
       setSelectedFile(null);
       setStatusMessage("Please choose a DOCX file.");
+      setUploadedDocumentId(null);
       return;
     }
 
     if (!isDocxFile(file)) {
       setSelectedFile(null);
       setStatusMessage("Only .docx files are allowed.");
+      setUploadedDocumentId(null);
       event.target.value = "";
       return;
     }
 
     setSelectedFile(file);
     setStatusMessage(null);
+    setUploadedDocumentId(null);
   };
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -50,13 +56,15 @@ export function useDocumentUpload() {
     }
 
     try {
-      await uploadMutation.mutateAsync(selectedFile);
+      const { id } = await uploadMutation.mutateAsync(selectedFile);
       setStatusMessage("Document uploaded successfully.");
+      setUploadedDocumentId(id);
       setSelectedFile(null);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Upload failed unexpectedly.";
       setStatusMessage(`Upload failed: ${errorMessage}`);
+      setUploadedDocumentId(null);
     }
   };
 
@@ -64,6 +72,7 @@ export function useDocumentUpload() {
     selectedFileName: selectedFile?.name ?? null,
     fileSize,
     statusMessage,
+    uploadedDocumentId,
     isUploading: uploadMutation.isPending,
     onFileChange,
     onSubmit,

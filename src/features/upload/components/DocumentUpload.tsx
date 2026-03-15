@@ -1,17 +1,24 @@
-import { Notice, Panel } from "../../../components";
+import { ButtonLink, Notice, Panel } from "../../../components";
 import { useDocumentUpload } from "../hooks/useDocumentUpload";
 
-type UploadDocumentSectionProps = {};
+type UploadDocumentSectionProps = {
+  toDocumentDetails: (documentId: string) => string;
+};
 
-export function DocumentUpload({}: UploadDocumentSectionProps) {
+export function DocumentUpload({ toDocumentDetails }: UploadDocumentSectionProps) {
   const {
     selectedFileName,
     fileSize,
     statusMessage,
+    uploadedDocumentId,
     isUploading,
     onFileChange,
     onSubmit,
   } = useDocumentUpload();
+
+  const showUploadedDocumentLink =
+    statusMessage === "Document uploaded successfully." && uploadedDocumentId;
+
   return (
     <Panel as="section">
       <h2 className="text-2xl font-semibold text-slate-900">Upload document</h2>
@@ -56,7 +63,20 @@ export function DocumentUpload({}: UploadDocumentSectionProps) {
         </button>
       </form>
 
-      {statusMessage ? <Notice className="mt-4">{statusMessage}</Notice> : null}
+      {statusMessage ? (
+        <Notice className="mt-4">
+          <div className="space-y-3">
+            <p>{statusMessage}</p>
+            {showUploadedDocumentLink ? (
+              <ButtonLink
+                to={toDocumentDetails(uploadedDocumentId)}
+              >
+                Open uploaded document
+              </ButtonLink>
+            ) : null}
+          </div>
+        </Notice>
+      ) : null}
     </Panel>
   );
 }
