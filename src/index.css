@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
@@ -25,5 +25,21 @@
 
   #root {
     @apply min-h-screen;
+  }
+
+  h1 {
+    @apply text-3xl font-bold;
+  }
+
+  h2 {
+    @apply text-2xl font-bold;
+  }
+
+  ol {
+    @apply list-decimal list-inside;
+  }
+
+  ul {
+    @apply list-disc list-inside;
   }
 }
